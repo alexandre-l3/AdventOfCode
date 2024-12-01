@@ -15,7 +15,9 @@ public sealed class Day1 : IDay
     public string SolveSecond()
     {
         var frequencies = _locations.Select(l => l.RightId).GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
-        return _locations.Select(l => l.LeftId).Where(l => frequencies.ContainsKey(l))
+
+        return _locations.Select(l => l.LeftId)
+            .Where(l => frequencies.ContainsKey(l))
             .Sum(l => l * frequencies[l])
             .ToString();
     }
