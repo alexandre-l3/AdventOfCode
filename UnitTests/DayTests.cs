@@ -8,13 +8,15 @@ public class DayTests
     public static TheoryData<IDay, string> PartOne = new()
     {
         { new Day1(), "1530215" },
-        { new Day2(), "257" }
+        { new Day2(), "257" },
+        { new Day3(), "167650499" }
     };
 
     public static TheoryData<IDay, string> PartTwo = new()
     {
         { new Day1(), "26800609" },
-        { new Day2(), "328" }
+        { new Day2(), "328" },
+        { new Day3(), "95846796" }
     };
     
     [MemberData(nameof(PartOne))]
