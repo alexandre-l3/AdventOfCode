@@ -4,8 +4,8 @@ public sealed class Day1 : IDay
 {
     public string SolveFirst()
     {
-        var left = _locations.Select(l => l.LeftId).OrderBy(x => x).ToList();
-        var right = _locations.Select(l => l.RightId).OrderBy(x => x).ToList();
+        var left = _locations.Select(l => l.LeftId).OrderBy(x => x);
+        var right = _locations.Select(l => l.RightId).OrderBy(x => x);
 
         return left.Zip(right)
             .Sum(s => Math.Abs(s.First - s.Second))
