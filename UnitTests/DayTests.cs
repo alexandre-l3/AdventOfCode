@@ -9,14 +9,16 @@ public class DayTests
     {
         { new Day1(), "11" },
         { new Day2(), "2" },
-        { new Day3(), "161" }
+        { new Day3(), "161" },
+        { new Day4(), "18" }
     };
 
     public static TheoryData<IDay, string> PartTwo = new()
     {
         { new Day1(), "31" },
         { new Day2(), "4" },
-        { new Day3(), "48" }
+        { new Day3(), "48" },
+        { new Day4(), "9" }
     };
     
     [MemberData(nameof(PartOne))]
