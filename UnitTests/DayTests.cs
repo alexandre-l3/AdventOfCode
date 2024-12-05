@@ -3,14 +3,15 @@ using FluentAssertions;
 
 namespace UnitTests;
 
-public class DayTests
+public sealed class DayTests
 {
     public static TheoryData<IDay, string> PartOne = new()
     {
         { new Day1(), "11" },
         { new Day2(), "2" },
         { new Day3(), "161" },
-        { new Day4(), "18" }
+        { new Day4(), "18" },
+        { new Day5(), "143" }
     };
 
     public static TheoryData<IDay, string> PartTwo = new()
@@ -18,7 +19,8 @@ public class DayTests
         { new Day1(), "31" },
         { new Day2(), "4" },
         { new Day3(), "48" },
-        { new Day4(), "9" }
+        { new Day4(), "9" },
+        { new Day5(), "123" }
     };
     
     [MemberData(nameof(PartOne))]
