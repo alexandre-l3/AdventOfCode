@@ -39,9 +39,9 @@ public sealed class Day5 : IDay
             .Select(rule => (int.Parse(rule[0]), int.Parse(rule[1])));
     }
 
-    private static Dictionary<int, List<int>> GetRelationsMap(IEnumerable<(int, int)> relations)
+    private static Dictionary<int, HashSet<int>> GetRelationsMap(IEnumerable<(int, int)> relations)
     {
-        var greaterThan = new Dictionary<int, List<int>>();
+        var greaterThan = new Dictionary<int, HashSet<int>>();
         foreach (var (a, b) in relations)
         {
             if (greaterThan.TryGetValue(a, out var value))
@@ -57,7 +57,7 @@ public sealed class Day5 : IDay
         return greaterThan;
     }
 
-    private static bool IsInOrder(int[] pageNumbers, Dictionary<int, List<int>> greaterThan)
+    private static bool IsInOrder(int[] pageNumbers, Dictionary<int, HashSet<int>> greaterThan)
     {
         var previous = pageNumbers[0];
         var isInOrder = true;
@@ -77,7 +77,7 @@ public sealed class Day5 : IDay
         return isInOrder;
     }
 
-    private sealed class PageComparer(Dictionary<int, List<int>> greaterThan) : IComparer<int>
+    private sealed class PageComparer(Dictionary<int, HashSet<int>> greaterThan) : IComparer<int>
     {
         public int Compare(int x, int y)
         {
