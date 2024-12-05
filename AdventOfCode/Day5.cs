@@ -18,19 +18,14 @@ public sealed class Day5 : IDay
         var relations = GetRelations();
         var greaterThan = GetRelationsMap(relations);
         var comparer = new PageComparer(greaterThan);
-        var result = 0;
-        foreach (var update in _updates)
-        {
-            var pageNumbers = update.Split(',').Select(int.Parse).ToArray();
-            if (IsInOrder(pageNumbers, greaterThan))
-            {
-                continue;
-            }
-            Array.Sort(pageNumbers, comparer);
-            result += pageNumbers[pageNumbers.Length / 2];
-        }
 
-        return result.ToString();
+        return _updates.Select(update => update.Split(',').Select(int.Parse).ToArray())
+            .Where(pageNumbers => !IsInOrder(pageNumbers, greaterThan))
+            .Sum(pageNumbers =>
+            {
+                Array.Sort(pageNumbers, comparer);
+                return pageNumbers[pageNumbers.Length / 2];
+            }).ToString();
     }
 
     private IEnumerable<(int, int)> GetRelations()
