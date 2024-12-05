@@ -2,11 +2,11 @@
 
 public sealed class Day2 : IDay
 {
-    public string SolveFirst() => _reports.Select(report => report.Split(' ').Select(int.Parse).ToArray())
+    public string SolvePartOne() => _reports.Select(report => report.Split(' ').Select(int.Parse).ToArray())
         .Count(IsSafeSequence)
         .ToString();
 
-    public string SolveSecond()
+    public string SolvePartTwo()
     {
         var result = 0;
         foreach (var report in _reports)

@@ -2,6 +2,6 @@ namespace AdventOfCode;
 
 public interface IDay
 {
-    string SolveFirst();
-    string SolveSecond();
+    string SolvePartOne();
+    string SolvePartTwo();
 }

@@ -25,9 +25,9 @@ public sealed class DayTests
     
     [MemberData(nameof(PartOne))]
     [Theory(DisplayName = "Solve advent of code part one ")]
-    public void Test1(IDay day, string expected) => day.SolveFirst().Should().Be(expected);
+    public void Test1(IDay day, string expected) => day.SolvePartOne().Should().Be(expected);
     
     [MemberData(nameof(PartTwo))]
     [Theory(DisplayName = "Solve advent of code part two ")]
-    public void Test2(IDay day, string expected) => day.SolveSecond().Should().Be(expected);
+    public void Test2(IDay day, string expected) => day.SolvePartTwo().Should().Be(expected);
 }

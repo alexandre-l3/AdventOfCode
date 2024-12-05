@@ -2,7 +2,7 @@ namespace AdventOfCode;
 
 public sealed class Day5 : IDay
 {
-    public string SolveFirst()
+    public string SolvePartOne()
     {
         var relations = GetRelations();
         var greaterThan = GetRelationsMap(relations);
@@ -13,7 +13,7 @@ public sealed class Day5 : IDay
             .ToString();
     }
 
-    public string SolveSecond()
+    public string SolvePartTwo()
     {
         var relations = GetRelations();
         var greaterThan = GetRelationsMap(relations);

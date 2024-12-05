@@ -2,7 +2,7 @@ namespace AdventOfCode;
 
 public sealed class Day1 : IDay
 {
-    public string SolveFirst()
+    public string SolvePartOne()
     {
         var left = _locations.Select(l => l.LeftId).OrderBy(x => x);
         var right = _locations.Select(l => l.RightId).OrderBy(x => x);
@@ -12,7 +12,7 @@ public sealed class Day1 : IDay
             .ToString();
     }
 
-    public string SolveSecond()
+    public string SolvePartTwo()
     {
         var frequencies = _locations.Select(l => l.RightId).GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
 

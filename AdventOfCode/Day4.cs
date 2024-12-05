@@ -2,7 +2,7 @@ namespace AdventOfCode;
 
 public sealed class Day4 : IDay
 {
-    public string SolveFirst()
+    public string SolvePartOne()
     {
         var n = _words.Length;
         var m = _words[0].Length;
@@ -37,7 +37,7 @@ public sealed class Day4 : IDay
         return result.ToString();
     }
 
-    public string SolveSecond()
+    public string SolvePartTwo()
     {
         var words = _words;
         var n = words.Length;

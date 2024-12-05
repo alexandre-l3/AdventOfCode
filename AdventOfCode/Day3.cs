@@ -4,7 +4,7 @@ namespace AdventOfCode;
 
 public sealed class Day3 : IDay
 {
-    public string SolveFirst()
+    public string SolvePartOne()
     {
         var regex = new Regex(@"mul\(\d+,\d+\)");
         var match = regex.Match(Memory1);
@@ -19,7 +19,7 @@ public sealed class Day3 : IDay
         return result.ToString();
     }
 
-    public string SolveSecond()
+    public string SolvePartTwo()
     {
         var regex = new Regex(@"(mul\(\d+,\d+\)|(do\(\)|don\'t\(\)))");
         var match = regex.Match(Memory2);
