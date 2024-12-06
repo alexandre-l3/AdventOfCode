@@ -11,7 +11,8 @@ public sealed class DayTests
         { new Day2(), "2" },
         { new Day3(), "161" },
         { new Day4(), "18" },
-        { new Day5(), "143" }
+        { new Day5(), "143" },
+        { new Day6(), "41" }
     };
 
     public static TheoryData<IDay, string> PartTwo = new()
@@ -20,7 +21,8 @@ public sealed class DayTests
         { new Day2(), "4" },
         { new Day3(), "48" },
         { new Day4(), "9" },
-        { new Day5(), "123" }
+        { new Day5(), "123" },
+        { new Day6(), "6" }
     };
     
     [MemberData(nameof(PartOne))]
