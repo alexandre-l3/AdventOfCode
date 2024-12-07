@@ -2,108 +2,42 @@ namespace AdventOfCode;
 
 public sealed class Day7 : IDay
 {
-    public string SolvePartOne()
-    {
-        var results = 0L;
-        foreach (var calibrationEquation in _calibrationEquations)
-        {
-            var equation = calibrationEquation.Split(':');
-            var testValue = long.Parse(equation[0]);
-            var rightTerms = equation[1].Trim().Split(' ').Select(long.Parse).ToArray();
-            var permutations = GetPermutations(rightTerms.Length - 1, ['+', '*']);
-            var isCorrectlyCalibrated = false;
-            foreach (var permutation in permutations)
-            {
-                var calculation = rightTerms[0];
-                for (var i = 0; i < permutation.Count; i++)
-                {
-                    calculation = permutation[i] switch
-                    {
-                        '+' => calculation + rightTerms[i + 1],
-                        '*' => calculation * rightTerms[i + 1],
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-                }
-                if (calculation == testValue)
-                {
-                    isCorrectlyCalibrated = true;
-                    break;
-                }
-            }
+    public string SolvePartOne() => CalculateTotalCalibration(['+', '*']).ToString();
 
-            if (isCorrectlyCalibrated)
+    public string SolvePartTwo() => CalculateTotalCalibration(['+', '*', '|']).ToString();
+
+    private long CalculateTotalCalibration(char[] operations) => _calibrationEquations.Select(e =>
+        {
+            var equation = e.Split(':');
+            return new
             {
-                results += testValue;
-            }
+                TestValue = long.Parse(equation[0]),
+                Terms = equation[1].Trim().Split(' ').Select(long.Parse).ToArray()
+            };
+        })
+        .Where(x => IsCalibrated(operations, x.TestValue, x.Terms, 1, x.Terms.First()))
+        .Sum(x => x.TestValue);
+
+    private static bool IsCalibrated(char[] operations, long target, long[] rightTerms, int index, long calculation)
+    {
+        if (target == calculation && index == rightTerms.Length)
+        {
+            return true;
         }
 
-        return results.ToString();
-    }
-
-    public string SolvePartTwo()
-    {
-        var results = 0L;
-        foreach (var calibrationEquation in _calibrationEquations)
+        if (index >= rightTerms.Length)
         {
-            var equation = calibrationEquation.Split(':');
-            var testValue = long.Parse(equation[0]);
-            var rightTerms = equation[1].Trim().Split(' ').Select(long.Parse).ToArray();
-            var permutations = GetPermutations(rightTerms.Length - 1, ['|', '*', '+']);
-            var isCorrectlyCalibrated = false;
-            foreach (var permutation in permutations)
+            return false;
+        }
+
+        return operations.Select(operation => operation switch
             {
-                var calculation = rightTerms[0];
-                for (var i = 0; i < permutation.Count; i++)
-                {
-                    calculation = permutation[i] switch
-                    {
-                        '+' => calculation + rightTerms[i + 1],
-                        '*' => calculation * rightTerms[i + 1],
-                        '|' => long.Parse($"{calculation}{rightTerms[i + 1]}"),
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-                }
-                if (calculation == testValue)
-                {
-                    isCorrectlyCalibrated = true;
-                    break;
-                }
-            }
-
-            if (isCorrectlyCalibrated)
-            {
-                results += testValue;
-            }
-        }
-
-        return results.ToString();
-    }
-
-    private static List<List<char>> GetPermutations(int n, char[] operations)
-    {
-        var results = new List<List<char>>();
-        Backtrack(operations, results, [], 0, n);
-        return results;
-    }
-
-    private static void Backtrack(char[] operations,
-        List<List<char>> results,
-        List<char> candidate,
-        int currentIndex,
-        int target)
-    {
-        if (candidate.Count == target)
-        {
-            results.Add([..candidate]);
-            return;
-        }
-
-        foreach (var operation in operations)
-        {
-            candidate.Add(operation);
-            Backtrack(operations, results, candidate, currentIndex + 1, target);
-            candidate.RemoveAt(currentIndex);
-        }
+                '+' => calculation + rightTerms[index],
+                '*' => calculation * rightTerms[index],
+                '|' => long.Parse($"{calculation}{rightTerms[index]}"),
+                _ => throw new ArgumentOutOfRangeException()
+            })
+            .Any(newCalculation => IsCalibrated(operations, target, rightTerms, index + 1, newCalculation));
     }
 
     private readonly string[] _calibrationEquations =
