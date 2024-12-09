@@ -8,11 +8,13 @@ public sealed class Day9 : IDay
     {
         var stringBuilder = new StringBuilder();
         var id = 0;
-        for (var i = 0; i < DiskMap.Length; i++)
+        var freeSpaceIndices = new Queue<int>();
+        for (var i = 0; i < _diskMap.Length; i++)
         {
+            var digit = _diskMap[i] - '0';
             if (i % 2 == 0)
             {
-                for (var j = 0; j < DiskMap[i] - '0'; j++)
+                for (var j = 0; j < digit; j++)
                 {
                     stringBuilder.Append(id);
                 }
@@ -20,44 +22,39 @@ public sealed class Day9 : IDay
             }
             else
             {
-                for (var j = 0; j < DiskMap[i] - '0'; j++)
+                for (var j = 0; j < digit; j++)
                 {
+                    freeSpaceIndices.Enqueue(stringBuilder.Length);
                     stringBuilder.Append('.');
                 }
             }
         }
 
         var transformedMap = stringBuilder.ToString().ToCharArray();
-
-        var freeSpaces = transformedMap.Count(x => x == '.');
-        var queue = new Queue<int>();
-
+        Console.WriteLine(stringBuilder.ToString());
+        Console.WriteLine("----");
         for (var i = transformedMap.Length - 1; i >= 0; i--)
         {
-            if (queue.Count == freeSpaces)
-            {
-                break;
-            }
             if (transformedMap[i] == '.')
             {
                 continue;
             }
-            queue.Enqueue(transformedMap[i] - '0');
+
+            if (freeSpaceIndices.Count == 0)
+            {
+                break;
+            }
+            var freeSpaceIndex = freeSpaceIndices.Dequeue();
+            if (freeSpaceIndex > i)
+            {
+                break;
+            }
+            (transformedMap[freeSpaceIndex], transformedMap[i]) = (transformedMap[i], transformedMap[freeSpaceIndex]);
         }
 
-        for (var i = 0; i < transformedMap.Length; i++)
-        {
-            if (queue.Count == 0)
-            {
-                transformedMap[i] = '.';
-            }
-            if (queue.Count > 0 && transformedMap[i] == '.')
-            {
-                transformedMap[i] = (char) (queue.Dequeue() + '0');
-            }
-        }
+        Console.WriteLine(new string(transformedMap));
 
-        return new string(transformedMap);
+        return transformedMap.Where(char.IsDigit).Select((x, i) => 1L * (x - '0') * i).Sum().ToString();
     }
 
     public string SolvePartTwo()
@@ -65,5 +62,6 @@ public sealed class Day9 : IDay
         throw new NotImplementedException();
     }
 
+    private readonly string _diskMap = DiskMap;
     private static string DiskMap = "2333133121414131402";
 }
