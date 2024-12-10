@@ -6,28 +6,45 @@ public sealed class Day10 : IDay
 {
     public string SolvePartOne()
     {
-        var result = 0;
+        var score = 0;
         for (var i = 0; i < _grid.Length; i++)
         {
             for (var j = 0; j < _grid[i].Length; j++)
             {
                 if (_grid[i][j] == '0')
                 {
-                    result += Search(new Complex(i, j));
+                    score += CalculateScore(i + Complex.ImaginaryOne * j);
                 }
             }
         }
 
-        return result.ToString();
+        return score.ToString();
     }
 
-    private int Search(Complex start)
+    public string SolvePartTwo()
+    {
+        var ratings = 0;
+        for (var i = 0; i < _grid.Length; i++)
+        {
+            for (var j = 0; j < _grid[i].Length; j++)
+            {
+                if (_grid[i][j] == '0')
+                {
+                    ratings += CalculateRatings(i + Complex.ImaginaryOne * j);
+                }
+            }
+        }
+
+        return ratings.ToString();
+    }
+
+    private int CalculateScore(Complex start)
     {
         var queue = new Queue<Complex>([start]);
         var highestPositions = 0;
         var visited = new HashSet<Complex>();
 
-        while (queue.Any())
+        while (queue.Count > 0)
         {
             var node = queue.Dequeue();
             var position = _grid[(int)node.Real][(int)node.Imaginary] - '0';
@@ -39,7 +56,7 @@ public sealed class Day10 : IDay
             foreach (var direction in _direction)
             {
                 var next = node + direction;
-                if (next.Real < 0 || next.Real >= _grid.Length || next.Imaginary < 0 || next.Imaginary >= _grid[0].Length)
+                if (OutOfBounds(next))
                 {
                     continue;
                 }
@@ -58,28 +75,28 @@ public sealed class Day10 : IDay
         return highestPositions;
     }
 
-    private int SearchRating(Complex start)
+    private int CalculateRatings(Complex start)
     {
         var queue = new Queue<Complex>([start]);
-        var lowestPositions = 0;
+        var ratings = 0;
 
-        while (queue.Any())
+        while (queue.Count > 0)
         {
             var node = queue.Dequeue();
             var position = _grid[(int)node.Real][(int)node.Imaginary] - '0';
-            if (position == 0)
+            if (position == 9)
             {
-                lowestPositions++;
+                ratings++;
             }
 
             foreach (var direction in _direction)
             {
                 var next = node + direction;
-                if (next.Real < 0 || next.Real >= _grid.Length || next.Imaginary < 0 || next.Imaginary >= _grid[0].Length)
+                if (OutOfBounds(next))
                 {
                     continue;
                 }
-                if (_grid[(int)next.Real][(int)next.Imaginary] - '0' != position - 1)
+                if (_grid[(int)next.Real][(int)next.Imaginary] - '0' != position + 1)
                 {
                     continue;
                 }
@@ -87,27 +104,13 @@ public sealed class Day10 : IDay
             }
         }
 
-        return lowestPositions;
+        return ratings;
     }
 
-    public string SolvePartTwo()
-    {
-        var result = 0;
-        for (var i = 0; i < _grid.Length; i++)
-        {
-            for (var j = 0; j < _grid[i].Length; j++)
-            {
-                if (_grid[i][j] == '9')
-                {
-                    result += SearchRating(new Complex(i, j));
-                }
-            }
-        }
+    private bool OutOfBounds(Complex z) => z.Real < 0 || z.Real >= _grid.Length ||
+                                           z.Imaginary < 0 || z.Imaginary >= _grid[0].Length;
 
-        return result.ToString();
-    }
-
-    private readonly Complex[] _direction = [new(1, 0), new(0, 1), new(-1, 0), new(0, -1)];
+    private readonly Complex[] _direction = [Complex.One, Complex.ImaginaryOne, -Complex.One, -Complex.ImaginaryOne];
 
     private readonly string[] _grid =
     [
