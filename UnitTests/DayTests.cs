@@ -18,6 +18,7 @@ public sealed class DayTests
         { new Day9(), "1928" },
         { new Day10(), "36" },
         { new Day11(), "55312" },
+        { new Day12(), "1930" },
         { new Day13(), "480" }
     };
 
@@ -34,6 +35,7 @@ public sealed class DayTests
         { new Day9(), "2858" },
         { new Day10(), "81" },
         { new Day11(), "65601038650482" },
+        { new Day12(), "1206" },
         { new Day13(), "875318608908" }
     };
     
