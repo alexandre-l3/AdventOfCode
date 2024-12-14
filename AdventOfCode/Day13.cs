@@ -36,14 +36,12 @@ public sealed partial class Day13 : IDay
             return 0L;
         }
 
-        var aPresses = b.Y * target.X - b.X * target.Y;
-        var bPresses = -a.Y * target.X + a.X * target.Y;
-        if (aPresses % determinant != 0 || bPresses % determinant != 0)
+        var aPresses = Math.DivRem(b.Y * target.X - b.X * target.Y, determinant, out var remainderA);
+        var bPresses = Math.DivRem(-a.Y * target.X + a.X * target.Y, determinant, out var remainderB);
+        if (remainderA != 0 || remainderB != 0)
         {
             return 0L;
         }
-        aPresses /= determinant;
-        bPresses /= determinant;
         if (validate((aPresses, bPresses)))
         {
             return 3 * aPresses + bPresses;
