@@ -98,9 +98,6 @@ public sealed class Day12 : IDay
         {
             var leftDsu = new DisjointSetUnion();
             var rightDsu = new DisjointSetUnion();
-            var lefts = new List<Complex>();
-            var rights = new List<Complex>();
-
             for (var i = 0; i < _farm.Length; i++)
             {
                 var current = i + Complex.ImaginaryOne * j;
@@ -114,18 +111,16 @@ public sealed class Day12 : IDay
                     disjointSetUnion.Find(current - Complex.ImaginaryOne) != region)
                 {
                     leftDsu.MakeSet(current);
-                    lefts.Add(current);
                 }
 
                 if (OutOfBounds(current + Complex.ImaginaryOne) ||
                     disjointSetUnion.Find(current + Complex.ImaginaryOne) != region)
                 {
                     rightDsu.MakeSet(current);
-                    rights.Add(current);
                 }
             }
-            ConnectLine(leftDsu, lefts, Complex.One);
-            ConnectLine(rightDsu, rights, Complex.One);
+            ConnectLine(leftDsu, Complex.One);
+            ConnectLine(rightDsu, Complex.One);
             leftSides += leftDsu.Sets.Count;
             rightSides += rightDsu.Sets.Count;
         }
@@ -141,9 +136,6 @@ public sealed class Day12 : IDay
         {
             var topDsu = new DisjointSetUnion();
             var bottomDsu = new DisjointSetUnion();
-            var tops = new List<Complex>();
-            var bottoms = new List<Complex>();
-
             for (var j = 0; j < _farm[0].Length; j++)
             {
                 var current = i + Complex.ImaginaryOne * j;
@@ -156,19 +148,17 @@ public sealed class Day12 : IDay
                 if (OutOfBounds(current - Complex.One) ||
                     disjointSetUnion.Find(current - Complex.One) != region)
                 {
-                    tops.Add(current);
                     topDsu.MakeSet(current);
                 }
 
                 if (OutOfBounds(current + Complex.One) ||
                     disjointSetUnion.Find(current + Complex.One) != region)
                 {
-                    bottoms.Add(current);
                     bottomDsu.MakeSet(current);
                 }
             }
-            ConnectLine(topDsu, tops, Complex.ImaginaryOne);
-            ConnectLine(bottomDsu, bottoms, Complex.ImaginaryOne);
+            ConnectLine(topDsu, Complex.ImaginaryOne);
+            ConnectLine(bottomDsu, Complex.ImaginaryOne);
             topSides += topDsu.Sets.Count;
             bottomSides += bottomDsu.Sets.Count;
         }
@@ -176,8 +166,9 @@ public sealed class Day12 : IDay
         return topSides + bottomSides;
     }
 
-    private static void ConnectLine(DisjointSetUnion disjointSetUnion, List<Complex> line, Complex direction)
+    private static void ConnectLine(DisjointSetUnion disjointSetUnion, Complex direction)
     {
+        var line = disjointSetUnion.Sets;
         for (var k = 0; k < line.Count - 1; k++)
         {
             if (line[k] + direction == line[k + 1])
