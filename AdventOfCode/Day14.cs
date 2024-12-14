@@ -26,28 +26,23 @@ public sealed partial class Day14 : IDay
             var velocity = values[2] + Complex.ImaginaryOne * values[3];
 
             var finalPosition = position + 100 * velocity;
-            var x = (int)(finalPosition.Real % GridWidth < 0
-                ? (finalPosition.Real % GridWidth) + GridWidth
-                : finalPosition.Real % GridWidth);
-            var y = (int)(finalPosition.Imaginary % GridHeight < 0
-                ? (finalPosition.Imaginary % GridHeight) + GridHeight
-                : finalPosition.Imaginary % GridHeight);
+            var x = Modulo(finalPosition.Real, GridWidth);
+            var y = Modulo(finalPosition.Imaginary, GridHeight);
 
-            if (y is >= 0 and < GridHeight / 2 && x is >= 0 and < GridWidth / 2)
+            switch (y)
             {
-                quadrants[0]++;
-            }
-            else if (y >= (GridHeight / 2) + 1 && x is >= 0 and < GridWidth /2)
-            {
-                quadrants[1]++;
-            }
-            else if (y >= (GridHeight / 2) + 1 && x >= (GridWidth / 2) + 1)
-            {
-                quadrants[2]++;
-            }
-            else if (y is >= 0 and < GridHeight / 2 && x >= (GridWidth / 2) + 1)
-            {
-                quadrants[3]++;
+                case >= 0 and < GridHeight / 2 when x is >= 0 and < GridWidth / 2:
+                    quadrants[0]++;
+                    break;
+                case >= GridHeight / 2 + 1 when x is >= 0 and < GridWidth /2:
+                    quadrants[1]++;
+                    break;
+                case >= GridHeight / 2 + 1 when x >= GridWidth / 2 + 1:
+                    quadrants[2]++;
+                    break;
+                case >= 0 and < GridHeight / 2 when x >= GridWidth / 2 + 1:
+                    quadrants[3]++;
+                    break;
             }
         }
 
@@ -57,39 +52,40 @@ public sealed partial class Day14 : IDay
     public string SolvePartTwo()
     {
         var iteration = 0;
+        var movements = new List<(Complex Position, Complex Velocity)>();
+        foreach (var robot in _robots)
+        {
+            var values = NumberRegex().Matches(robot)
+                .Select(m => m.Value)
+                .Select(int.Parse)
+                .ToArray();
+            var position = values[0] + Complex.ImaginaryOne * values[1];
+            var velocity = values[2] + Complex.ImaginaryOne * values[3];
+            movements.Add((position, velocity));
+        }
+
         while (true)
         {
             iteration++;
-            var positions = new HashSet<Complex>();
-            var count = 0;
-                    
-            foreach (var robot in _robots)
-            {
-                var values = NumberRegex().Matches(robot)
-                    .Select(m => m.Value)
-                    .Select(int.Parse)
-                    .ToArray();
-                var position = values[0] + Complex.ImaginaryOne * values[1];
-                var velocity = values[2] + Complex.ImaginaryOne * values[3];
-    
-                var finalPosition = position + iteration * velocity;
-                var x = (int)(finalPosition.Real % GridWidth < 0
-                    ? (finalPosition.Real % GridWidth) + GridWidth
-                    : finalPosition.Real % GridWidth);
-                var y = (int)(finalPosition.Imaginary % GridHeight < 0
-                    ? (finalPosition.Imaginary % GridHeight) + GridHeight
-                    : finalPosition.Imaginary % GridHeight);
-                positions.Add(x + Complex.ImaginaryOne * y);
-                count++;
-            }
+            var distinctPositions = movements.Select(m => m.Position + iteration * m.Velocity)
+                .Select(z => Modulo(z.Real, GridWidth) + Complex.ImaginaryOne * Modulo(z.Imaginary, GridHeight))
+                .ToHashSet()
+                .Count;
 
-            if (positions.Count != count)
+            if (distinctPositions != _robots.Length)
             {
                 continue;
             }
             break;
         }
+
         return iteration.ToString();
+    }
+
+    private static int Modulo(double value, int modulus)
+    {
+        var result = value % modulus;
+        return (int)(result < 0 ? result + modulus : result);
     }
 
     private readonly string[] _robots =
