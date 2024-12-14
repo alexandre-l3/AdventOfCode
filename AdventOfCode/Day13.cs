@@ -4,7 +4,7 @@ namespace AdventOfCode;
 
 public sealed partial class Day13 : IDay
 {
-    private const long CorrectiveTerm = 10000000000000L;
+    private const long Correction = 10000000000000L;
 
     [GeneratedRegex("\\d+")]
     private static partial Regex NumberRegex();
@@ -13,7 +13,7 @@ public sealed partial class Day13 : IDay
 
     public string SolvePartTwo() => Solve((a, b, target) =>
         {
-            var correctedTarget = new Pair(CorrectiveTerm + target.X, CorrectiveTerm + target.Y);
+            var correctedTarget = new Pair(Correction + target.X, Correction + target.Y);
             return CalculateCost(a, b, correctedTarget, _ => true);
         }).ToString();
 
