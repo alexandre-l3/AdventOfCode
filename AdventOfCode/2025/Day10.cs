@@ -126,6 +126,7 @@ public sealed class Day10 : IDay
             {
                 Console.WriteLine("solver unable to find a solution to this LP problem");
                 result += 0;
+                continue;
             }
 
             result += Enumerable.Range(0, m).Sum(k => solver.Value(variables[k]));
